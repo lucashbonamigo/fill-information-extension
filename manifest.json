@@ -1,0 +1,10 @@
+{
+  "manifest_version": 3,
+  "name": "Fill Positivo Form",
+  "version": "1.0",
+  "description": "Extesion for filling Positivo FORM",
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "permissions": ["activeTab"]
+}
