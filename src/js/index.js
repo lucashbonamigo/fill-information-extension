@@ -1,4 +1,12 @@
+import {setLocalValue, getLocalValue} from '../../storage';
+
 const btn = document.querySelector('#btn');
+const dateInput = document.querySelector("#dateInput");
+const dataDeHoje = new Date();
+
+const dataFormatada = dataDeHoje.toISOString().split('T')[0];
+
+dateInput.value = dataFormatada;
 
 btn.addEventListener('click', consoleClass);
 
