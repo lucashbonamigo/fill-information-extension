@@ -1,6 +1,6 @@
-myStorage = localStorage;
+const myStorage = localStorage;
 
-export function getLocalValue(label){
+export function getLocalValue(label, value){
     return localStorage.getItem(label, value);
 }
 

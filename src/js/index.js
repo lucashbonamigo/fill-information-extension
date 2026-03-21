@@ -1,19 +1,11 @@
-import {setLocalValue, getLocalValue} from '../../storage';
-
-const btn = document.querySelector('#btn');
-const dateInput = document.querySelector("#dateInput");
-const dataDeHoje = new Date();
-
-const dataFormatada = dataDeHoje.toISOString().split('T')[0];
-
-dateInput.value = dataFormatada;
-
-btn.addEventListener('click', consoleClass);
+// ... (início do seu index.js mantido igual) ...
 
 async function consoleClass() {
-    let [tab] = await browser.tabs.query({ active: true, currentWindow: true });
+    let tabs = await browser.tabs.query({ active: true, currentWindow: true });
+    let tab = tabs[0]; // Pegamos a primeira aba da matriz
 
-   let results = await browser.scr({
+    // CORREÇÃO: Nome completo da API
+    await browser.scripting.executeScript({
         target: { tabId: tab.id },
         func: lerCamposDaPagina,
     });
@@ -21,12 +13,10 @@ async function consoleClass() {
 
 function lerCamposDaPagina() {
     var nameFields = document.querySelectorAll(".-_W-159");
-    
     alert("Encontrei " + nameFields.length + " campo(s)!");
 
     for (let i = 0; i < nameFields.length; i++) {
         const element = nameFields[i];
-        
         alert("O valor do campo " + i + " é: " + element.value); 
     }
 }
