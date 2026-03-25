@@ -1,18 +1,25 @@
 const btn = document.querySelector('#btnEntry');
+const btnOut = document.querySelector('#btnOutPut');
 const dateInput = document.querySelector("#dateInput");
 const dataDeHoje = new Date();
 const dataFormatada = dataDeHoje.toISOString().split('T')[0];
 
-dateInput.value = dataFormatada;     
+dateInput.value = dataFormatada;
 
 
-btn.addEventListener('click', consoleClass);
+btn.addEventListener('click', () => {
+    consoleClass("ent");
+});
 
-dateInput.addEventListener('input', (event)=>{
-    dateInput.textContent = event.target.value; 
+btnOut.addEventListener('click', () => {
+    consoleClass("out");
+});
+
+dateInput.addEventListener('input', (event) => {
+    dateInput.textContent = event.target.value;
 })
 
-async function consoleClass() {
+async function consoleClass(type) {
     let tabs = await browser.tabs.query({ active: true, currentWindow: true });
     let tab = tabs[0];
 
@@ -21,12 +28,12 @@ async function consoleClass() {
 
     await browser.scripting.executeScript({
         target: { tabId: tab.id },
-        func: lerCamposDaPagina,
-        args: [savedData, datevaleu]
+        func: fillFirstPageCorrectPoint,
+        args: [savedData, datevaleu, type]
     });
 }
 
-async function lerCamposDaPagina(savedData,dateInput) {
+async function fillFirstPageCorrectPoint(savedData, dateInput, type) {
     const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
     var nameFields = document.querySelectorAll('textarea, [data-automation-id="textInput"], [aria-haspopup="listbox"]');
@@ -72,7 +79,6 @@ async function lerCamposDaPagina(savedData,dateInput) {
         console.log("Botão Next não encontrado na tela!");
     }
 
-
     var nameFieldsPage2 = document.querySelectorAll('input, [data-automation-id="textInput"], [aria-haspopup="listbox"]');
     for (let i = 0; i < nameFieldsPage2.length; i++) {
         const element = nameFieldsPage2[i];
@@ -93,11 +99,15 @@ async function lerCamposDaPagina(savedData,dateInput) {
             let textoDesejado = "";
 
             if (i === 1) {
-                textoDesejado = "Entrada";
-            } else if (i === 2 && savedData.horaEntrada) {
+                textoDesejado = type == "ent" ? "Entrada" : "Saida";
+            } else if (i === 2 && type == "ent") {
                 textoDesejado = savedData.horaEntrada.split(":")[0].trim();
-            } else if (i === 3 && savedData.horaEntrada) {
+            } else if (i === 2 && type == "out") {
+                textoDesejado = savedData.horaSaida.split(":")[0].trim();
+            } else if (i === 3 && type == "ent") {
                 textoDesejado = savedData.horaEntrada.split(":")[1].trim();
+            } else if (i === 3 && type == "out") {
+                textoDesejado = savedData.horaSaida.split(":")[1].trim();
             }
 
             let todasOpcoes = document.querySelectorAll('span');
