@@ -8,7 +8,7 @@ body {
 }
 
 .gradient-text {
-    background: linear-gradient(135deg, #00c853 0%, #6200ea 100%);
+    background: linear-gradient(135deg, #FD008D 0%, #180041 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -104,7 +104,7 @@ textarea {
 
 .positivo-gradient-bg {
 
-    background-image: linear-gradient(135deg, #00FF00 0%, #000000 50%, #FF00FF 100%);
+    background-image: linear-gradient(135deg, #FD008D 0%, #000000 50%, #180041 100%);
     background-size: cover;
 
 }
@@ -128,8 +128,12 @@ body {
     padding: 5px;
 }
 
+.text{
+    color: transparent;
+}
+
 .positivo-btn {
-    background-color: #00FF00;
+    background-color: #E1BEE7;
     color: #000000;
     border: 2px solid #000000;
     padding: 5px 12px;

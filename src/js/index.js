@@ -3,28 +3,33 @@ const dateInput = document.querySelector("#dateInput");
 const dataDeHoje = new Date();
 const dataFormatada = dataDeHoje.toISOString().split('T')[0];
 
-dateInput.value = dataFormatada;
+dateInput.value = dataFormatada;     
+
 
 btn.addEventListener('click', consoleClass);
+
+dateInput.addEventListener('input', (event)=>{
+    dateInput.textContent = event.target.value; 
+})
 
 async function consoleClass() {
     let tabs = await browser.tabs.query({ active: true, currentWindow: true });
     let tab = tabs[0];
 
     let savedData = await browser.storage.local.get(null);
+    let datevaleu = dateInput.value;
 
     await browser.scripting.executeScript({
         target: { tabId: tab.id },
         func: lerCamposDaPagina,
-        args: [savedData]
+        args: [savedData, datevaleu]
     });
 }
 
-async function lerCamposDaPagina(savedData) {
+async function lerCamposDaPagina(savedData,dateInput) {
     const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
     var nameFields = document.querySelectorAll('textarea, [data-automation-id="textInput"], [aria-haspopup="listbox"]');
-    alert("Encontrei " + nameFields.length + " campo(s)!");
 
     for (let i = 0; i < nameFields.length; i++) {
         const element = nameFields[i];
@@ -69,19 +74,22 @@ async function lerCamposDaPagina(savedData) {
 
 
     var nameFieldsPage2 = document.querySelectorAll('input, [data-automation-id="textInput"], [aria-haspopup="listbox"]');
-
     for (let i = 0; i < nameFieldsPage2.length; i++) {
         const element = nameFieldsPage2[i];
-
         if (i === 0) {
-            element.value = dateInput || "";
+            var date = dateInput.split("-");
+            var day = date[2];
+            var month = date[1];
+            var year = date[0];
+            element.value = `${day}/${month}/${year}` || "";
+            console.log(dateInput)
             element.dispatchEvent(new Event('input', { bubbles: true }));
             element.dispatchEvent(new Event('change', { bubbles: true }));
         }
         else if (element.getAttribute('aria-haspopup') === 'listbox') {
             element.click();
             await sleep(300);
-
+            console.log('aqui')
             let textoDesejado = "";
 
             if (i === 1) {
